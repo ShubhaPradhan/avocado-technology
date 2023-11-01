@@ -9,15 +9,20 @@ class NewsTile extends StatelessWidget {
   const NewsTile({
     super.key,
     required this.title,
+    required this.description,
   });
 
   final String? title;
+  final String? description;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => const NewsDetails());
+        Get.to(() => NewsDetails(
+              title: title,
+              description: description,
+            ));
       },
       child: Container(
         decoration: BoxDecoration(

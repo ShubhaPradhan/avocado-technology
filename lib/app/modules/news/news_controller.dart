@@ -11,6 +11,8 @@ class NewsController extends GetxController {
 
   final isNewsLoading = false.obs;
 
+  final isVideoPressed = false.obs;
+
   @override
   void onInit() async {
     super.onInit();

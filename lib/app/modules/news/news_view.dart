@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -128,15 +130,23 @@ class _NewsViewState extends State<NewsView>
               ),
             ),
             Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                physics: const BouncingScrollPhysics(),
-                children: [
-                  TrendingNews(),
-                  TrendingNews(),
-                  TrendingNews(),
-                  TrendingNews(),
-                ],
+              child: Obx(
+                () => newsController.isNewsLoading.value
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                      )
+                    : TabBarView(
+                        controller: _tabController,
+                        physics: const BouncingScrollPhysics(),
+                        children: [
+                          TrendingNews(),
+                          TrendingNews(),
+                          TrendingNews(),
+                          TrendingNews(),
+                        ],
+                      ),
               ),
             ),
           ],

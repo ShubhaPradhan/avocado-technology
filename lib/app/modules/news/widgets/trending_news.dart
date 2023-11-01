@@ -31,12 +31,14 @@ class TrendingNews extends StatelessWidget {
           ),
           physics: const BouncingScrollPhysics(),
           itemCount:
-              // newsController.newsApiResponse.value.response!.news!.length,
-              8,
-          itemBuilder: (context, index) => const NewsTile(
-            // title: newsController
-            // .newsApiResponse.value.response!.news![index].title,
-            title: 'fdsfd',
+              newsController.newsApiResponse.value.response!.news!.length,
+          // 8,
+          itemBuilder: (context, index) => NewsTile(
+            title: newsController
+                .newsApiResponse.value.response!.news![index].title,
+            description: newsController
+                .newsApiResponse.value.response!.news![index].body,
+            // title: 'fdsfd',
           ),
         ),
       ),
