@@ -110,31 +110,32 @@ class NewsTile extends StatelessWidget {
             SizedBox(
               height: 2.h,
             ),
-            Stack(
-              children: [
-                // image with play button
-                Container(
-                  height: 20.h,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'assets/images/demo-thumbnail.png',
+            Expanded(
+              child: Stack(
+                children: [
+                  // image with play button
+                  Container(
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                          'assets/images/demo-thumbnail.png',
+                        ),
+                        fit: BoxFit.cover,
                       ),
-                      fit: BoxFit.cover,
                     ),
                   ),
-                ),
-                // play button
-                Positioned.fill(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      'assets/images/play-btn.png',
-                      height: 12.h,
+                  // play button
+                  Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Image.asset(
+                        'assets/images/play-btn.png',
+                        height: 12.h,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

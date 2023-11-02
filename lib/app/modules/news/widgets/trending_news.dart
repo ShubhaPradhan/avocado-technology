@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:news_portal/app/config/colors.dart';
 import 'package:news_portal/app/config/constants.dart';
 import 'package:news_portal/app/modules/news/news_controller.dart';
+import 'package:news_portal/app/widgets/no_data_widget.dart';
 
 import 'news_tile.dart';
 
@@ -21,26 +22,28 @@ class TrendingNews extends StatelessWidget {
           newsController.getNews();
         },
         color: primaryColor,
-        child: GridView.builder(
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.55,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20,
-          ),
-          physics: const BouncingScrollPhysics(),
-          itemCount:
-              newsController.newsApiResponse.value.response!.news!.length,
-          // 8,
-          itemBuilder: (context, index) => NewsTile(
-            title: newsController
-                .newsApiResponse.value.response!.news![index].title,
-            description: newsController
-                .newsApiResponse.value.response!.news![index].body,
-            // title: 'fdsfd',
-          ),
-        ),
+        child: newsController.newsApiResponse.value.response == null
+            ? const NoDataWidget()
+            : GridView.builder(
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.55,
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 20,
+                ),
+                physics: const BouncingScrollPhysics(),
+                itemCount:
+                    newsController.newsApiResponse.value.response!.news!.length,
+                // 8,
+                itemBuilder: (context, index) => NewsTile(
+                  title: newsController
+                      .newsApiResponse.value.response!.news![index].title,
+                  description: newsController
+                      .newsApiResponse.value.response!.news![index].body,
+                  // title: 'fdsfd',
+                ),
+              ),
       ),
     );
   }

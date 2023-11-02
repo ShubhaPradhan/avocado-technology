@@ -1,9 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 import 'package:get/get.dart';
 import 'package:news_portal/app/config/colors.dart';
 import 'package:news_portal/app/config/constants.dart';
+import 'package:news_portal/app/widgets/no_internet_connection_widget.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../widgets/top_bar.dart';
 import 'news_controller.dart';
@@ -128,28 +131,133 @@ class _NewsViewState extends State<NewsView>
               ),
             ),
             Expanded(
-              child: Obx(
-                () => newsController.isNewsLoading.value
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: primaryColor,
+              child: OfflineBuilder(
+                connectivityBuilder: (
+                  BuildContext context,
+                  ConnectivityResult connectivity,
+                  Widget child,
+                ) {
+                  final bool connected =
+                      connectivity != ConnectivityResult.none;
+                  return connected ? child : const NoInternetConnectionWidget();
+                },
+                child: Obx(
+                  () => newsController.isNewsLoading.value
+                      ? const ShimmerNewsList()
+                      : TabBarView(
+                          controller: _tabController,
+                          physics: const BouncingScrollPhysics(),
+                          children: [
+                            TrendingNews(),
+                            TrendingNews(),
+                            TrendingNews(),
+                            TrendingNews(),
+                          ],
                         ),
-                      )
-                    : TabBarView(
-                        controller: _tabController,
-                        physics: const BouncingScrollPhysics(),
-                        children: [
-                          TrendingNews(),
-                          TrendingNews(),
-                          TrendingNews(),
-                          TrendingNews(),
-                        ],
-                      ),
+                ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class ShimmerNewsList extends StatelessWidget {
+  const ShimmerNewsList({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      padding: EdgeInsets.symmetric(
+        horizontal: horizontalPadding,
+      ),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.55,
+        crossAxisSpacing: 20,
+        mainAxisSpacing: 20,
+      ),
+      itemCount: 10, // Number of grid items
+      itemBuilder: (context, index) {
+        return Container(
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: newsTileBorderColor,
+            ),
+          ),
+          child: Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: 2.h,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Container(
+                  height: 2.h,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Container(
+                  height: 2.h,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      height: 3.h,
+                      width: 10.h,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                      ),
+                    ),
+                    const Spacer(),
+                    Container(
+                      height: 2.h,
+                      width: 5.h,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
