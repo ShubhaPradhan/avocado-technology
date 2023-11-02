@@ -14,7 +14,7 @@ const Color textColorBlack = Color(0xFF000000);
 
 const Color tabActiveColor = Color(0xFF398D33);
 
-const Color newsTileBorderColor = Color.fromRGBO(15, 60, 12, 0.51);
+const Color newsTileBorderColor = Color(0x820F3C0C);
 
 const Color progressBarColor = Color.fromRGBO(208, 208, 208, 0.5);
 

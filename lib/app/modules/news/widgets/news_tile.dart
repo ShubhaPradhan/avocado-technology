@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:news_portal/app/config/colors.dart';
 import 'package:news_portal/app/modules/news/news_controller.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -39,7 +40,7 @@ class NewsTile extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: const Color(0xFFE5E5E5),
+            color: newsTileBorderColor,
           ),
         ),
         padding: EdgeInsets.all(
@@ -64,6 +65,7 @@ class NewsTile extends StatelessWidget {
                     fontSize: 13.6.sp,
                     fontWeight: FontWeight.w700,
                     decoration: TextDecoration.underline,
+                    overflow: TextOverflow.clip,
                   ),
                 ),
               ),
