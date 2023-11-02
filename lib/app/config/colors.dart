@@ -17,3 +17,5 @@ const Color tabActiveColor = Color(0xFF398D33);
 const Color newsTileBorderColor = Color.fromRGBO(15, 60, 12, 0.51);
 
 const Color progressBarColor = Color.fromRGBO(208, 208, 208, 0.5);
+
+Color videoOverlayColor = Colors.black.withOpacity(0.4);

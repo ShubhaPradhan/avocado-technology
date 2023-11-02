@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:news_portal/app/config/colors.dart';
-import 'package:news_portal/app/config/constants.dart';
 import 'package:news_portal/app/modules/news/news_controller.dart';
 import 'package:pod_player/pod_player.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -136,6 +135,10 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                                   : GestureDetector(
                                       onTap: () {
                                         controller.togglePlayPause();
+                                        controller.isVideoPlaying
+                                            ? newsController
+                                                .isVideoPressed.value = false
+                                            : _debounce!.cancel();
                                       },
                                       child: Container(
                                         height: controller.isFullScreen
@@ -198,27 +201,38 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                         ),
                         Container(
                           padding: EdgeInsets.only(
-                            left: horizontalPadding,
-                            right: horizontalPadding,
-                            top: 1.5.h,
+                            left: 4.w,
+                            right: 4.w,
+                            top: controller.isFullScreen ? 2.h : 1.3.h,
                           ),
-                          color: Colors.black.withOpacity(0.5),
+                          color: videoOverlayColor,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
-                                  Text(
-                                    "${controller.currentVideoPosition.toString().split('.')[0]} / ${controller.totalVideoLength.toString().split('.')[0]}",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14.sp,
+                                  SizedBox(
+                                    height: controller.isFullScreen ? 4.h : 2.h,
+                                    child: Text(
+                                      "${newsController.formatTime(controller.currentVideoPosition.inSeconds)} / ${newsController.formatTime(controller.totalVideoLength.inSeconds)}",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14.5.sp,
+                                      ),
                                     ),
                                   ),
                                   const Spacer(),
                                   GestureDetector(
                                     onTap: () {
+                                      Future.delayed(
+                                        const Duration(milliseconds: 300),
+                                        () {
+                                          newsController.isVideoPressed.value =
+                                              false;
+                                        },
+                                      );
                                       if (controller.isFullScreen) {
                                         controller.disableFullScreen(context);
                                         SystemChrome.setPreferredOrientations([
@@ -232,10 +246,25 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                                         ]);
                                       }
                                     },
-                                    child: Image.asset(
-                                      'assets/images/full-screen.png',
+                                    child: Container(
+                                      alignment: Alignment.centerRight,
                                       height:
-                                          controller.isFullScreen ? 4.h : 2.h,
+                                          controller.isFullScreen ? 8.h : 2.h,
+                                      width:
+                                          controller.isFullScreen ? 13.h : 7.h,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.transparent,
+                                      ),
+                                      child: Icon(
+                                        controller.isFullScreen
+                                            ? Icons.fullscreen_exit
+                                            : Icons.fullscreen,
+                                        color: Colors.white,
+                                        size: controller.isFullScreen
+                                            ? 6.h
+                                            : 2.5.h,
+                                      ),
                                     ),
                                   )
                                 ],
@@ -248,6 +277,13 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 1.w, vertical: 0.h),
                                   child: Slider(
+                                      onChangeStart: (value) async {
+                                        _debounce!.cancel();
+                                      },
+                                      onChangeEnd: (value) async {
+                                        newsController.isVideoPressed.value =
+                                            false;
+                                      },
                                       activeColor: primaryColor,
                                       allowedInteraction:
                                           SliderInteraction.tapAndSlide,

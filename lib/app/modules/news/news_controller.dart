@@ -37,4 +37,19 @@ class NewsController extends GetxController {
       );
     }
   }
+
+  String formatTime(int duration) {
+    // convert duration int to Duration object
+    final durations = Duration(seconds: duration);
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = twoDigits(durations.inHours);
+    final minutes = twoDigits(durations.inMinutes.remainder(60));
+    final seconds = twoDigits(durations.inSeconds.remainder(60));
+
+    return [
+      if (durations.inHours > 0) hours,
+      minutes,
+      seconds,
+    ].join(':');
+  }
 }
