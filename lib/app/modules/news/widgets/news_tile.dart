@@ -1,12 +1,16 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:news_portal/app/modules/news/news_controller.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'news_details.dart';
 
 class NewsTile extends StatelessWidget {
-  const NewsTile({
+  final newsController = Get.put(NewsController());
+  NewsTile({
     super.key,
     required this.title,
     required this.description,
@@ -17,11 +21,17 @@ class NewsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final random = Random();
+    final randomInt = random.nextInt(5);
+    final randomVideoType = newsController.randomizeVideoSource(
+      randomInt,
+    );
     return GestureDetector(
       onTap: () {
         Get.to(() => NewsDetails(
               title: title,
               description: description,
+              videoType: randomVideoType,
             ));
       },
       child: Container(
@@ -63,38 +73,7 @@ class NewsTile extends StatelessWidget {
             ),
             Row(
               children: [
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 2.5.w,
-                    vertical: 0.6.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFCD201F),
-                    borderRadius: BorderRadius.circular(
-                      50,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        'assets/images/youtube.png',
-                        color: Colors.white,
-                        height: 1.3.h,
-                      ),
-                      SizedBox(
-                        width: 1.8.w,
-                      ),
-                      Text(
-                        'Youtube',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                randomVideoType,
                 const Spacer(),
                 Text(
                   '1 hour ago',
